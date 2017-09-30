@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <TextView
+        android:text="Coded By Ali Nejati (09122012908)"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewWriter" />
+    <DigitalClock
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/digitalClock1" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewTotalLoan"
+        android:text="Total Loan (Toman)"
+        android:layout_marginBottom="0.0dp" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextTotalLoan"
+        android:numeric="decimal"
+        android:singleLine="true"
+        android:imeOptions="actionNext" />
+    <TextView
+        android:text="Pay Per Month (Toman)"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewPayPerMonth" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextPayPerMonth"
+        android:numeric="decimal"
+        android:singleLine="true"
+        android:imeOptions="actionNext" />
+    <TextView
+        android:text="Total Months"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewTotalMonths"
+        android:layout_marginBottom="9.3dp" />
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextTotalMonths"
+        android:numeric="integer"
+        android:singleLine="true"
+        android:imeOptions="normal" />
+    <Button
+        android:text="Calculate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonCalculate" />
+</LinearLayout>
