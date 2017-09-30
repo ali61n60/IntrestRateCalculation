@@ -6,96 +6,67 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using IntrestRateCalculation.Models;
 
 namespace IntrestRateCalculation
 {
     [Activity(Label = "IntrestRateCalculation", MainLauncher = true, Icon = "@drawable/icon")]
     public class Activity1 : Activity
     {
-        
-
+        private Button _buttonCalculate;
+        private EditText _editTextTotalLoan;
+        private EditText _editTextPayPerMonth;
+        private EditText _editTextTotalMonths;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
+            initComponents();
+        }
 
-            // Get our button from the layout resource,
-            // and attach an event to it
-            Button buttontranslate = FindViewById<Button>(Resource.Id.buttonCalculate);
-            EditText textTotalLoan = FindViewById<EditText>(Resource.Id.editTextTotalLoan);
-            EditText textPayPerMonth = FindViewById<EditText>(Resource.Id.editTextPayPerMonth);
-            EditText textTotalMonths = FindViewById<EditText>(Resource.Id.editTextTotalMonths);
-            
+        private void initComponents()
+        {
+            _buttonCalculate = FindViewById<Button>(Resource.Id.buttonCalculate);
+            _buttonCalculate.Click += ButtonCalculateClick;
+            _editTextTotalLoan = FindViewById<EditText>(Resource.Id.editTextTotalLoan);
+            _editTextPayPerMonth = FindViewById<EditText>(Resource.Id.editTextPayPerMonth);
+            _editTextTotalMonths = FindViewById<EditText>(Resource.Id.editTextTotalMonths);
 
-            //EditText textTotalLoan = FindViewById<EditText>(Resource.Id.editTextTotalLoan);
-            buttontranslate.Click += (object sender, EventArgs e) =>
-                {
-                    int totalIterations=400;
-                    int totalMonths=0;
-                    double totalLoan = 0;
-                    double tempTotalLoan = 0;
-                    double payPerMonth = 0;
-                    double intrestRate = 15;
-                    string messageToUser = "";
-                    try
-                    {
-                         totalLoan = double.Parse(textTotalLoan.Text);
-                         tempTotalLoan = totalLoan;
-                         payPerMonth = double.Parse(textPayPerMonth.Text);
-                         totalMonths = int.Parse(textTotalMonths.Text);
-                         for (int i = 1; i < totalIterations; i++)
-                         {
-                             tempTotalLoan = totalLoan;
-                             for (int j = 0; j < totalMonths; j++)
-                             {
-                                 tempTotalLoan = tempTotalLoan + tempTotalLoan * intrestRate / 1200 - payPerMonth;
-                             }
-                             if (tempTotalLoan > payPerMonth)
-                             {
-                                 intrestRate-=0.25;
-                             }
-                             else if (tempTotalLoan < 0)
-                             {
-                                 intrestRate+=0.25;
-                             }
-                             else
-                             {
-                                 break;
-                             }
-                         }
-                         
-                        
-                             messageToUser = "Intrest Rate is: " + intrestRate.ToString()+" %\n plus "+((int)tempTotalLoan).ToString()+" Toman";
+        }
 
-                         
+        private void ButtonCalculateClick(object sender, EventArgs e)
+        {
+            Calculator calculator = new Calculator();
+            double totalLoan = 0;
+            bool resultTotalLoan = double.TryParse(_editTextTotalLoan.Text, out totalLoan);
+            int totalMonths = 0;
+            bool resultTotalMonth = int.TryParse(_editTextTotalMonths.Text, out totalMonths);
+            double payPerMonth = 0;
+            bool resultPayPerMonth = double.TryParse(_editTextPayPerMonth.Text, out payPerMonth);
+            if (!resultTotalLoan || !resultTotalMonth || !resultPayPerMonth)
+            {
+                //Error in conversion
+                //return
+            }
+            try
+            {
+                double intrestRate = calculator.CalculateIntrestRatePercent(totalLoan, payPerMonth, totalMonths);
+                string message = $"Intrest Rate is: {intrestRate}%";
+                showMessage(message);
+            }
+            catch (Exception ex)
+            {
+                showMessage(ex.Message);
+            }
+        }
 
-                        var callDialog = new AlertDialog.Builder(this);
-                        callDialog.SetMessage(messageToUser);
-                        // callDialog.SetNeutralButton(
-                        //callDialog.SetNeutralButton("Ok", delegate
-                        // {
-                        // Create intent to dial phone
-                        // var callIntent = new Intent(Intent.ActionCall);
-                        //  callIntent.SetData(Android.Net.Uri.Parse("tel:" + translatedNumber));
-                        // StartActivity(callIntent);
-                        //  });
-                        callDialog.SetNegativeButton("OK", delegate { });
-
-                        // Show the alert dialog to the user and wait for response.
-                        callDialog.Show();
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-                };
-
-
-            
-
-           
+        private void showMessage(string message)
+        {
+            var callDialog = new AlertDialog.Builder(this);
+            callDialog.SetMessage(message);
+            callDialog.SetNegativeButton("OK", delegate { });
+            callDialog.Show();
         }
     }
 }
